@@ -12,7 +12,10 @@ namespace BinaryTrees
         public BinaryTreeNode(TKey key, TValue value)
         {
             //TODO #1: Initialize member variables/attributes
-            
+             Key = key;
+            Value = value;
+            LeftChild = null;
+            RightChild = null;
         }
 
         public string ToString(int depth)
@@ -44,22 +47,76 @@ namespace BinaryTrees
             //          -If the current node has a lower key that the new node (use CompareTo()), the new node should be on this node's right side.
             //          -If the current node and the new node have the same key, just update this node's value with the new node's value
             
+            if (this.Key.CompareTo(node.Key) == 0)
+            {
+                Value = node.Value;
+            }
+            else if (this.Key.CompareTo(node.Key) > 0)
+            {
+                if (LeftChild == null)
+                {
+                    LeftChild = node;
+                }
+                else
+                {
+                    LeftChild.Add(node);
+                }
+            }
+            else
+            {
+                if (RightChild == null)
+                {
+                    RightChild = node;
+                }
+                else
+                {
+                    RightChild.Add(node);
+                }
+            }
         }
 
         public int Count()
         {
             //TODO #3: Return the total number of elements in this tree
             
-            return 0;
-            
+           if (LeftChild != null && RightChild != null)
+            {
+                return 1 + LeftChild.Count() + RightChild.Count();
+            }
+            else if (LeftChild != null)
+            {
+                return 1 + LeftChild.Count();
+            }
+            else if (RightChild != null )
+            {
+                return 1 + RightChild.Count();
+            }
+            else
+            {
+                return 1;
+            }  
         }
 
         public int Height()
         {
             //TODO #4: Return the height of this tree
             
-            return 0;
-            
+            if (LeftChild != null && RightChild != null)
+            {
+                return 1 + Math.Max(LeftChild.Count() , RightChild.Count() ) ;
+            }
+            else if (LeftChild != null)
+            {
+                return 1 + Math.Max(LeftChild.Count() , 0 );
+            }
+            else if (RightChild != null)
+            {
+                return 1 + Math.Max( RightChild.Count() , 0 );
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public TValue Get(TKey key)
