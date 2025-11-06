@@ -88,6 +88,7 @@ public class List<T> : IList<T>
         //TODO #3: add a new integer to the end of the list
 
 
+        ListNode<T> newnode = new ListNode<T>(value);
         if (First == null)
         {
             First = newnode;

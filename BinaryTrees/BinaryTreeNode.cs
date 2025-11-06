@@ -51,28 +51,19 @@ namespace BinaryTrees
             {
                 Value = node.Value;
             }
-            else if (this.Key.CompareTo(node.Key) > 0)
+            else if (this.Key.CompareTo(node.Key) > 0 && LeftChild == null)
             {
-                if (LeftChild == null)
-                {
-                    LeftChild = node;
-                }
-                else
-                {
-                    LeftChild.Add(node);
-                }
+                LeftChild = node;
+            }
+            else if (this.Key.CompareTo(node.Key) < 0 && RightChild == null)
+            {  
+                RightChild = node;
             }
             else
             {
-                if (RightChild == null)
-                {
-                    RightChild = node;
-                }
-                else
-                {
                     RightChild.Add(node);
-                }
             }
+            
         }
 
         public int Count()
@@ -103,15 +94,15 @@ namespace BinaryTrees
             
             if (LeftChild != null && RightChild != null)
             {
-                return 1 + Math.Max(LeftChild.Count() , RightChild.Count() ) ;
+                return 1 + Math.Max(LeftChild.Height(),RightChild.Height()) ;
             }
             else if (LeftChild != null)
             {
-                return 1 + Math.Max(LeftChild.Count() , 0 );
+                return 1 + Math.Max(LeftChild.Height() ,0);
             }
             else if (RightChild != null)
             {
-                return 1 + Math.Max( RightChild.Count() , 0 );
+                return 1 + Math.Max( RightChild.Height() ,0);
             }
             else
             {
@@ -127,9 +118,23 @@ namespace BinaryTrees
             //              b) Else, we should ask the LeftChild to find the node recursively. It must be below LeftChild
             //          -If the current node has a lower key that the new node (use CompareTo()), the key should be on this node's right side.
             //          -If the current node and the new node have the same key, just return this node's value. We found it
-            
-            return default;
-            
+
+            if (Key.CompareTo(key) == 0)
+            {
+                return Value;
+            }
+            else if (Key.CompareTo(key) > 0 && LeftChild != null)
+            {
+                return LeftChild.Get(key);
+            }
+            else if (Key.CompareTo(key) > 0 && RightChild != null)
+            {
+                return RightChild.Get(key);
+            }
+            else
+            {
+               return default(TValue);  
+            }        
         }
 
         
@@ -140,8 +145,38 @@ namespace BinaryTrees
             //so this method returns the node with which this node needs to be replaced. If this node isn't the
             //one we are looking for, we will return this, so that the parent node can replace LeftChild/RightChild
             //with the same node it had.
-            
-            return null;
+
+
+            if (key.CompareTo(Key) == 0)
+            {
+                if (LeftChild == null)
+                {
+                    return RightChild;
+                }
+                else if (RightChild == null)
+                {
+                    return LeftChild;
+                }
+
+                BinaryTreeNode<TKey, TValue> node = RightChild;
+                BinaryTreeNode<TKey, TValue> IzquierdaMax = node;
+                while (IzquierdaMax.LeftChild != null)
+                {
+                    IzquierdaMax = IzquierdaMax.LeftChild;
+                    IzquierdaMax.LeftChild = LeftChild;
+                }
+                return node;
+            }
+            else if (key.CompareTo(Key) < 0 && LeftChild != null)
+            {
+                LeftChild = LeftChild.Remove(key);
+            }
+            else if (key.CompareTo(Key) > 0 && RightChild != null)
+            {
+                RightChild = RightChild.Remove(key);
+            }
+
+            return this;
             
         }
 
