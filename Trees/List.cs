@@ -9,15 +9,12 @@ public class ListNode<T>
     public T Value;
     public ListNode<T> Next = null;
 
-
-    public ListNode<T> Previous = null;
-
+    //public ListNode<T> Previous = null;
 
     public ListNode(T value)
     {
         Value = value;
     }
-
 
     public override string ToString()
     {
@@ -25,19 +22,16 @@ public class ListNode<T>
     }
 }
 
-
 public class List<T> : IList<T>
 {
     ListNode<T> First = null;
     ListNode<T> Last = null;
     int m_numItems = 0;
 
-
     public override string ToString()
     {
         ListNode<T> node = First;
         string output = "[";
-
 
         while (node != null)
         {
@@ -46,7 +40,6 @@ public class List<T> : IList<T>
         }
         output = output.TrimEnd(',') + "] " + Count() + " elements";
 
-
         return output;
     }
 
@@ -54,31 +47,27 @@ public class List<T> : IList<T>
     public int Count()
     {
         //TODO #1: return the number of elements on the list
-
-
         return m_numItems;
-
-
     }
 
 
     public T Get(int index)
     {
         //TODO #2: return the element on the index-th position. O if the position is out of bounds
-        if (index < 0 || index >= m_numItems)
+          if(index>= m_numItems)
         {
             return default(T);
         }
         else
         {
-            int i = 0;
-            ListNode<T> aux = First;
-            while (i < index)
+            int con = 0;
+            ListNode<T> node = First;
+            while (con < index)
             {
-                aux = aux.Next;
-                i++;
+                node = node.Next;
+                con++;
             }
-            return aux.Value;
+            return node.Value;  
         }
     }
 
@@ -87,80 +76,67 @@ public class List<T> : IList<T>
     {
         //TODO #3: add a new integer to the end of the list
 
+    ListNode<T> nuevo = new ListNode<T>(value);
 
-        ListNode<T> newnode = new ListNode<T>(value);
         if (First == null)
         {
-            First = newnode;
-            Last = newnode;
+
+            First = nuevo;
+            Last = First;
+            m_numItems++;
+
+        }
+        else if (Last == null)
+        {
+            Last = nuevo;
+            m_numItems++;
         }
         else
         {
-            Last.Next = newnode;
-            newnode.Previous = Last;
-            Last = newnode;
+            Last.Next = nuevo;
+            Last = nuevo;
+            m_numItems++;
         }
-        m_numItems++;
     }
 
 
     public T Remove(int index)
     {
         //TODO #4: remove the element on the index-th position. Do nothing if position is out of bounds
-        if (index < 0 || index >= m_numItems)
+        ListNode<T> Aborrar = null;
+        
+        if (index < 0||index == m_numItems)
         {
             return default(T);
         }
-
-
-        ListNode<T> nodeToRemove;
+        if (index == 0)
+        {
+            Aborrar = First;
+            First = First.Next;
+        }
+        else if (index == m_numItems -1)
+        {
+            Aborrar = Last;
+            //Last = Last.Previous;
+        }
         if (index < m_numItems / 2)
         {
-            nodeToRemove = First;
             for (int i = 0; i < index; i++)
             {
-                nodeToRemove = nodeToRemove.Next;
+                Aborrar = First;
+                First = First.Next;
             }
         }
-        else
+        else if (index > m_numItems / 2)
         {
-            nodeToRemove = Last;
-            for (int i = m_numItems - 1; i > index; i--)
+            for (int i = 0; i < index; i++)
             {
-                nodeToRemove = nodeToRemove.Previous;
+                Aborrar = Last;
+                //Last = Last.Previous;
             }
         }
-
-
-
-
-        T data = nodeToRemove.Value;
-
-
-
-
-        if (nodeToRemove.Previous != null)
-        {
-            nodeToRemove.Previous.Next = nodeToRemove.Next;
-        }
-        else
-        {
-            First = nodeToRemove.Next;
-        }
-
-
-        if (nodeToRemove.Next != null)
-        {
-            nodeToRemove.Next.Previous = nodeToRemove.Previous;
-        }
-        else
-        {
-            Last = nodeToRemove.Previous;
-        }
-
-
         m_numItems--;
-        return data;
+        return Aborrar.Value;
     }
 
 
@@ -178,12 +154,11 @@ public class List<T> : IList<T>
         //TODO #6 : Return an enumerator using "yield return" for each of the values in this list
 
 
-        ListNode<T> aux = First;
-        while (aux != null)
+       ListNode<T> node = First;
+        while(node != null)
         {
-            T data = aux.Value;
-            aux = aux.Next;
-            yield return data;
+            yield return node.Value;
+            node = node.Next;
         }
 
 
