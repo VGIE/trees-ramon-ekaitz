@@ -160,23 +160,25 @@ namespace BinaryTrees
 
             if (key.CompareTo(Key) == 0)
             {
-                if (LeftChild == null)
+                if (RightChild == null && LeftChild == null)
+                {
+                    return null;
+                }
+                if (LeftChild == null && RightChild != null)
                 {
                     return RightChild;
                 }
-                else if (RightChild == null)
+                else if (RightChild == null && LeftChild != null)
                 {
                     return LeftChild;
                 }
 
-                BinaryTreeNode<TKey, TValue> node = RightChild;
-                BinaryTreeNode<TKey, TValue> IzquierdaMax = node;
-                while (IzquierdaMax.LeftChild != null)
+                else
                 {
-                    IzquierdaMax = IzquierdaMax.LeftChild;
-                    IzquierdaMax.LeftChild = LeftChild;
+                    LeftChild.Add(RightChild);
+                    return LeftChild;
                 }
-                return node;
+
             }
             else if (key.CompareTo(Key) < 0 && LeftChild != null)
             {
