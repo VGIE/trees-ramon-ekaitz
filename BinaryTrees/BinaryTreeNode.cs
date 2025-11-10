@@ -46,24 +46,36 @@ namespace BinaryTrees
             //              b) Else, we should ask the LeftChild to add it recursively
             //          -If the current node has a lower key that the new node (use CompareTo()), the new node should be on this node's right side.
             //          -If the current node and the new node have the same key, just update this node's value with the new node's value
-            
+
+
             if (this.Key.CompareTo(node.Key) == 0)
             {
                 Value = node.Value;
             }
-            else if (this.Key.CompareTo(node.Key) > 0 && LeftChild == null)
+            else if (this.Key.CompareTo(node.Key) > 0)
             {
-                LeftChild = node;
+                if (LeftChild == null)
+                {
+                    LeftChild = node;
+                }
+                else
+                {
+                    LeftChild.Add(node);
+                }
             }
-            else if (this.Key.CompareTo(node.Key) < 0 && RightChild == null)
-            {  
-                RightChild = node;
-            }
-            else
+            else if (this.Key.CompareTo(node.Key) < 0 )
             {
+                if (RightChild == null)
+                {
+                    RightChild = node;
+                }
+                else
+                {
                     RightChild.Add(node);
+                }
+                   
             }
-            
+                  
         }
 
         public int Count()
@@ -127,7 +139,7 @@ namespace BinaryTrees
             {
                 return LeftChild.Get(key);
             }
-            else if (Key.CompareTo(key) > 0 && RightChild != null)
+            else if (Key.CompareTo(key) < 0 && RightChild != null)
             {
                 return RightChild.Get(key);
             }
@@ -145,7 +157,6 @@ namespace BinaryTrees
             //so this method returns the node with which this node needs to be replaced. If this node isn't the
             //one we are looking for, we will return this, so that the parent node can replace LeftChild/RightChild
             //with the same node it had.
-
 
             if (key.CompareTo(Key) == 0)
             {
